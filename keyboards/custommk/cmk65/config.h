@@ -21,18 +21,18 @@
 
 /* USB Device descriptor parameter */
 #define VENDOR_ID       0xF35B
-#define PRODUCT_ID      0xFAB0
+#define PRODUCT_ID      0xFAB1
 #define DEVICE_VER      0x0001
 #define MANUFACTURER    customMK
-#define PRODUCT         Genesis
+#define PRODUCT         CMK65
 
 /* key matrix size */
 #define MATRIX_ROWS 5
-#define MATRIX_COLS 4
+#define MATRIX_COLS 15
 
 /* key matrix pins */
-#define MATRIX_ROW_PINS { F0, C7, C6, B6, B5 }
-#define MATRIX_COL_PINS { F4, F5, D7, B4 }
+#define MATRIX_ROW_PINS { D3, D2, F7, F6, F5 }
+#define MATRIX_COL_PINS { F0, F1, F4, E6, D0, B7, B0, D1, D4, D6, D7, B4, B5, B6, C6 }
 #define UNUSED_PINS
 
 /* COL2ROW or ROW2COL */
@@ -47,14 +47,14 @@
 /* Locking resynchronize hack */
 #define LOCKING_RESYNC_ENABLE
 
-#define ENCODERS_PAD_A { F6, D2 }
-#define ENCODERS_PAD_B { F7, D1 }
+#define ENCODERS_PAD_A { C7 }
+#define ENCODERS_PAD_B { D5 }
 #define ENCODER_RESOLUTION 2
 #define TAP_CODE_DELAY 10
 
-#define RGB_DI_PIN E6
+#define RGB_DI_PIN B2
 #define RGBLIGHT_ANIMATIONS
-#define RGBLED_NUM 13
+#define RGBLED_NUM 30
 #define RGBLIGHT_HUE_STEP 8
 #define RGBLIGHT_SAT_STEP 8
 #define RGBLIGHT_VAL_STEP 8
