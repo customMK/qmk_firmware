@@ -49,7 +49,7 @@
 
 #define ENCODERS_PAD_A { C7 }
 #define ENCODERS_PAD_B { D5 }
-#define ENCODER_RESOLUTION 2
+#define ENCODER_RESOLUTION 4
 #define TAP_CODE_DELAY 10
 
 #define RGB_DI_PIN B2

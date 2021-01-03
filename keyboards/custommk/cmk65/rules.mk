@@ -4,6 +4,8 @@ MCU = atmega32u4
 # Bootloader selection
 BOOTLOADER = qmk-dfu
 
+SRC += cmk65_encoder.c 
+
 # Build Options
 #   change yes to no to disable
 #
@@ -21,3 +23,4 @@ RGBLIGHT_ENABLE = yes        # Enable keyboard RGB underglow
 BLUETOOTH_ENABLE = no       # Enable Bluetooth
 AUDIO_ENABLE = no           # Audio output
 ENCODER_ENABLE = yes
+OLED_DRIVER_ENABLE = yes
