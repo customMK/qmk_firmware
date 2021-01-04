@@ -20,6 +20,7 @@ uint8_t encoder_value = 0x20,
   encoder_mode = ENC_MODE_VOLUME,
   enabled_encoder_modes = 0x1F;
 
+/*
 uint16_t retrieve_custom_encoder_config(uint8_t encoder_idx, uint8_t behavior) {
 #ifdef DYNAMIC_KEYMAP_ENABLE
     void* addr = (void*)(EEPROM_CUSTOM_ENCODER + (encoder_idx * 6) + (behavior * 2));
@@ -38,6 +39,7 @@ void set_custom_encoder_config(uint8_t encoder_idx, uint8_t behavior, uint16_t n
     eeprom_update_byte(addr + 1, (uint8_t)(new_code & 0xFF));
 #endif
 }
+*/
 
 uint16_t get_encoder_mode(void){
   return encoder_mode;
@@ -71,9 +73,9 @@ void post_encoder_mode_change(void) {
 	dprintf("Encoder mode: %u\n", encoder_mode);
 }
 
-//???
 void change_encoder_mode(bool clockwise) {
-  pre_encoder_mode_change();
+  /*
+  //pre_encoder_mode_change();
   if(enabled_encoder_modes == 0){
     enabled_encoder_modes = 0x1F;
   }
@@ -88,11 +90,15 @@ void change_encoder_mode(bool clockwise) {
         encoder_mode = (encoder_mode + 1) % _NUM_ENCODER_MODES;
     }
   } while(((1 << encoder_mode) & enabled_encoder_modes) == 0);
-  post_encoder_mode_change();
+  //post_encoder_mode_change();
+  */
+
+  encoder_mode = (encoder_mode + 1) % _NUM_ENCODER_MODES;
+
 }
 
 uint16_t handle_encoder_cw(void) {
-	dprintf("Encoder mode: %u\n", encoder_mode);
+	//dprintf("Encoder mode: %u\n", encoder_mode);
   uint16_t mapped_code = 0;
   switch(encoder_mode){
     default:
@@ -109,23 +115,12 @@ uint16_t handle_encoder_cw(void) {
     case ENC_MODE_BRIGHTNESS:
       mapped_code = RGB_VAI;
       break;
-#ifdef DYNAMIC_KEYMAP_ENABLE
-    case ENC_MODE_CUSTOM0:
-      mapped_code = retrieve_custom_encoder_config(0, ENC_CUSTOM_CW);
-      break;
-    case ENC_MODE_CUSTOM1:
-      mapped_code = retrieve_custom_encoder_config(1, ENC_CUSTOM_CW);
-      break;
-    case ENC_MODE_CUSTOM2:
-      mapped_code = retrieve_custom_encoder_config(2, ENC_CUSTOM_CW);
-      break;
-#endif
   }
   return mapped_code;
 }
 
 uint16_t handle_encoder_ccw(void) {
-	dprintf("Encoder mode: %u\n", encoder_mode);
+	//dprintf("Encoder mode: %u\n", encoder_mode);
   uint16_t mapped_code = 0;
   switch(encoder_mode){
     default:
@@ -139,20 +134,9 @@ uint16_t handle_encoder_ccw(void) {
     case ENC_MODE_SCROLL:
       mapped_code = KC_WH_U;
       break;
-    case ENC_MODE_BACKLIGHT:
+    case ENC_MODE_BRIGHTNESS:
       mapped_code = RGB_VAD;
       break;
-#ifdef DYNAMIC_KEYMAP_ENABLE
-    case ENC_MODE_CUSTOM0:
-      mapped_code = retrieve_custom_encoder_config(0, ENC_CUSTOM_CCW);
-      break;
-    case ENC_MODE_CUSTOM1:
-      mapped_code = retrieve_custom_encoder_config(1, ENC_CUSTOM_CCW);
-      break;
-    case ENC_MODE_CUSTOM2:
-      mapped_code = retrieve_custom_encoder_config(2, ENC_CUSTOM_CCW);
-      break;
-#endif
   }
   return mapped_code;
 }

@@ -17,28 +17,28 @@
 #pragma once
 
 #include QMK_KEYBOARD_H
-#include "eeprom.h"
+//#include "eeprom.h"
 
+/*
 #define EEPROM_ENABLED_ENCODER_MODES (VIA_EEPROM_CUSTOM_CONFIG_ADDR)
 #define EEPROM_CUSTOM_ENCODER (VIA_EEPROM_CUSTOM_CONFIG_ADDR+1)
+*/
 
 enum encoder_modes {
   ENC_MODE_VOLUME,
   ENC_MODE_MEDIA,
   ENC_MODE_SCROLL,
-  ENC_MODE_BRIGHTNESS,
-  ENC_MODE_BACKLIGHT,
-  ENC_MODE_CUSTOM0,
-  ENC_MODE_CUSTOM1,
-  ENC_MODE_CUSTOM2,
-  _NUM_ENCODER_MODES,
+  ENC_MODE_BRIGHTNESS, 
+  _NUM_ENCODER_MODES
 };
 
+/*
 enum custom_encoder_behavior {
     ENC_CUSTOM_CW = 0,
     ENC_CUSTOM_CCW,
     ENC_CUSTOM_PRESS
 };
+*/
 
 uint16_t 
   retrieve_custom_encoder_config(uint8_t encoder_idx, uint8_t behavior),

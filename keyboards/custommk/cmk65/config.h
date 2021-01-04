@@ -32,6 +32,7 @@
 
 /* key matrix pins */
 #define MATRIX_ROW_PINS { D3, D2, F7, F6, F5 }
+//changed col4 and col7 to other pins temporarily
 #define MATRIX_COL_PINS { F0, F1, F4, E6, D0, B7, B0, D1, D4, D6, D7, B4, B5, B6, C6 }
 #define UNUSED_PINS
 
