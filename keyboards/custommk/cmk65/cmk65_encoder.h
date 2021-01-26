@@ -17,12 +17,6 @@
 #pragma once
 
 #include QMK_KEYBOARD_H
-//#include "eeprom.h"
-
-/*
-#define EEPROM_ENABLED_ENCODER_MODES (VIA_EEPROM_CUSTOM_CONFIG_ADDR)
-#define EEPROM_CUSTOM_ENCODER (VIA_EEPROM_CUSTOM_CONFIG_ADDR+1)
-*/
 
 enum encoder_modes {
   ENC_MODE_VOLUME,
@@ -32,23 +26,12 @@ enum encoder_modes {
   _NUM_ENCODER_MODES
 };
 
-/*
-enum custom_encoder_behavior {
-    ENC_CUSTOM_CW = 0,
-    ENC_CUSTOM_CCW,
-    ENC_CUSTOM_PRESS
-};
-*/
 
 uint16_t 
-  retrieve_custom_encoder_config(uint8_t encoder_idx, uint8_t behavior),
   handle_encoder_cw(void),
   get_encoder_mode(void),
   handle_encoder_ccw(void);
 
-void set_custom_encoder_config(uint8_t encoder_idx, uint8_t behavior, uint16_t new_code),
-  pre_encoder_mode_change(void),
-  post_encoder_mode_change(void),
-  change_encoder_mode(bool clockwise);
+void change_encoder_mode(bool clockwise);
 
 const char* print_encoder_mode(void);

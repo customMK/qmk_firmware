@@ -16,30 +16,8 @@
 
 #include "cmk65_encoder.h"
 
-uint8_t encoder_value = 0x20,
-  encoder_mode = ENC_MODE_VOLUME,
-  enabled_encoder_modes = 0x1F;
+uint8_t encoder_mode = ENC_MODE_VOLUME;
 
-/*
-uint16_t retrieve_custom_encoder_config(uint8_t encoder_idx, uint8_t behavior) {
-#ifdef DYNAMIC_KEYMAP_ENABLE
-    void* addr = (void*)(EEPROM_CUSTOM_ENCODER + (encoder_idx * 6) + (behavior * 2));
-    uint16_t keycode = eeprom_read_byte(addr) << 8;
-    keycode |= eeprom_read_byte(addr + 1);
-    return keycode;
-#else
-    return 0;
-#endif
-}
-
-void set_custom_encoder_config(uint8_t encoder_idx, uint8_t behavior, uint16_t new_code) {
-#ifdef DYNAMIC_KEYMAP_ENABLE
-    void* addr = (void*)(EEPROM_CUSTOM_ENCODER + (encoder_idx * 6) + (behavior * 2));
-    eeprom_update_byte(addr, (uint8_t)(new_code >> 8));
-    eeprom_update_byte(addr + 1, (uint8_t)(new_code & 0xFF));
-#endif
-}
-*/
 
 uint16_t get_encoder_mode(void){
   return encoder_mode;
@@ -51,55 +29,28 @@ const char* print_encoder_mode(void){
       return "";
       break;
     case ENC_MODE_VOLUME:
-      return "VOL";
+      return "VOLUME";
       break;
     case ENC_MODE_MEDIA:
-      return "MED";
+      return "MED CTRL";
       break;
     case ENC_MODE_SCROLL:
-      return "MS";
+      return "MOUSEWHL";
       break;
     case ENC_MODE_BRIGHTNESS:
-      return "RGB";
+      return "RGB BR";
       break;
   }
-}
-
-void pre_encoder_mode_change(void) {
-	dprintf("Changing encoder mode: %u\n", encoder_mode);
-}
-
-void post_encoder_mode_change(void) {
-	dprintf("Encoder mode: %u\n", encoder_mode);
 }
 
 void change_encoder_mode(bool clockwise) {
-  /*
-  //pre_encoder_mode_change();
-  if(enabled_encoder_modes == 0){
-    enabled_encoder_modes = 0x1F;
-  }
-  do {
-    if(!clockwise){
-      if (encoder_mode == 0){
-        encoder_mode = _NUM_ENCODER_MODES - 1;
-      } else{
-        encoder_mode = encoder_mode - 1;
-      }
-    } else {
-        encoder_mode = (encoder_mode + 1) % _NUM_ENCODER_MODES;
-    }
-  } while(((1 << encoder_mode) & enabled_encoder_modes) == 0);
-  //post_encoder_mode_change();
-  */
 
   encoder_mode = (encoder_mode + 1) % _NUM_ENCODER_MODES;
 
 }
 
 uint16_t handle_encoder_cw(void) {
-	//dprintf("Encoder mode: %u\n", encoder_mode);
-  uint16_t mapped_code = 0;
+	uint16_t mapped_code = 0;
   switch(encoder_mode){
     default:
     	break;
@@ -120,7 +71,6 @@ uint16_t handle_encoder_cw(void) {
 }
 
 uint16_t handle_encoder_ccw(void) {
-	//dprintf("Encoder mode: %u\n", encoder_mode);
   uint16_t mapped_code = 0;
   switch(encoder_mode){
     default:

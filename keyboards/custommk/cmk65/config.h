@@ -19,6 +19,8 @@
 
 #include "config_common.h"
 
+#include <stdbool.h>
+
 /* USB Device descriptor parameter */
 #define VENDOR_ID       0xF35B
 #define PRODUCT_ID      0xFAB1
@@ -47,6 +49,16 @@
 
 /* Locking resynchronize hack */
 #define LOCKING_RESYNC_ENABLE
+
+#ifdef QWIIC_MICRO_OLED_ENABLE
+
+#undef I2C_ADDRESS_SA0_1
+#define I2C_ADDRESS_SA0_1 0b0111100
+#define LCDWIDTH      128
+#define LCDHEIGHT     32
+
+#endif
+
 
 #define ENCODERS_PAD_A { C7 }
 #define ENCODERS_PAD_B { D5 }
