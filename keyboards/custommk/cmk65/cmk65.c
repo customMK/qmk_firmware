@@ -37,6 +37,7 @@
 #define WPM_DISPLAY_Y 15
 
 
+/* Encoder Parameters */
 uint8_t enc_mode = 0;
 
 char* enc_mode_str[] = {"VOL", "MED", "SCR", "VIA"};
@@ -101,7 +102,7 @@ __attribute__((weak)) void encoder_update_user(uint8_t index, bool clockwise) {
 }
 	
 
-
+/* OLED Draw Functions */
 void draw_keyboard_layer(void){
     draw_string(LAYER_DISPLAY_X, LAYER_DISPLAY_Y + 2, "LAYER", PIXEL_ON, NORM, 0);
 
