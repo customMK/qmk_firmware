@@ -46,9 +46,12 @@
 #define I2C_ADDRESS_SA0_1 0b0111100
 #define LCDWIDTH      128
 #define LCDHEIGHT     32
+#define micro_oled_rotate_180
 
 #endif
 
+#define BACKLIGHT_PIN B5
+#define BACKLIGHT_LIMIT_VAL 30
 
 #define ENCODERS_PAD_A { C7 }
 #define ENCODERS_PAD_B { D5 }

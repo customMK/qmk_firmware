@@ -15,7 +15,7 @@
  */
 
 #include "evo65.h"
-
+#include <stdbool.h>
 
 #ifdef QWIIC_MICRO_OLED_ENABLE
 #include "micro_oled.h"
@@ -65,7 +65,7 @@ void matrix_init_kb(void) {
 
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 
-	if (record->event.key.row == 0 && record->event.key.col == 14){
+	if (record->event.key.row == 3 && record->event.key.col == 0){
 		if (record->event.pressed) {
 			enc_mode = (enc_mode + 1) % num_enc_mode;
 		}
@@ -172,6 +172,7 @@ void draw_keyboard_locks(void) {
 
 void init_oled(void) {
 	clear_buffer();
+	
 	draw_keyboard_layer();
 	draw_enc_mode();
 	draw_keyboard_locks();

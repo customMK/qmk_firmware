@@ -333,7 +333,7 @@ void draw_line_hori(uint8_t x, uint8_t y, uint8_t width, uint8_t color, uint8_t 
 /** \brief Draw vertical line.
 Draw vertical line using current fore color and current draw mode from x,y to x,y+height of the screen buffer.
 */
-void draw_line_vert(uint8_t x, uint8_t y, uint8_t height, bool color, uint8_t mode) { draw_line(x, y, x, y + height, color, mode); }
+void draw_line_vert(uint8_t x, uint8_t y, uint8_t height, uint8_t color, uint8_t mode) { draw_line(x, y, x, y + height, color, mode); }
 
 /** \brief Draw rectangle with color and mode.
 Draw rectangle using color and mode from x,y to x+width,y+height of the screen buffer.
