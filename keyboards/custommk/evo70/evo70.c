@@ -49,12 +49,12 @@ uint16_t wpm = 0;
 bool send_oled = false;
 
 keyevent_t encoder_ccw = {
-    .key = (keypos_t){.row = 4, .col = 4},
+    .key = (keypos_t){.row = 4, .col = 8},
     .pressed = false
 };
 
 keyevent_t encoder_cw = {
-    .key = (keypos_t){.row = 4, .col = 5},
+    .key = (keypos_t){.row = 4, .col = 11},
     .pressed = false
 };
 
