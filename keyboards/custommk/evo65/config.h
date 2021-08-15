@@ -47,11 +47,15 @@
 #define LCDWIDTH      128
 #define LCDHEIGHT     32
 #define micro_oled_rotate_180
+#define NO_LCD_SPLASH
 
 #endif
 
 #define BACKLIGHT_PIN B5
-#define BACKLIGHT_LIMIT_VAL 30
+
+#define BACKLIGHT_LEVELS 17
+#define BACKLIGHT_BREATHING
+#define BREATHING_PERIOD 6
 
 #define ENCODERS_PAD_A { C7 }
 #define ENCODERS_PAD_B { D5 }

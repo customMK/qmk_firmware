@@ -35,6 +35,7 @@
 #define WPM_DISPLAY_X 80
 #define WPM_DISPLAY_Y 15
 
+#define OLED_FONT 2
 
 /* Encoder Parameters */
 uint8_t enc_mode = 0;
@@ -104,21 +105,21 @@ bool encoder_update_kb(uint8_t index, bool clockwise) {
 
 /* OLED Draw Functions */
 void draw_keyboard_layer(void){
-    draw_string(LAYER_DISPLAY_X, LAYER_DISPLAY_Y + 2, "LAYER", PIXEL_ON, NORM, 0);
+    draw_string(LAYER_DISPLAY_X, LAYER_DISPLAY_Y + 2, "LAYER", PIXEL_ON, NORM, OLED_FONT);
 
     draw_rect_filled_soft(LAYER_DISPLAY_X + 31, LAYER_DISPLAY_Y, 11, 11, PIXEL_ON, NORM);
-    draw_char(LAYER_DISPLAY_X + 34, LAYER_DISPLAY_Y + 2, get_highest_layer(layer_state) + 0x30, PIXEL_ON, XOR, 0);
+    draw_char(LAYER_DISPLAY_X + 34, LAYER_DISPLAY_Y + 2, get_highest_layer(layer_state) + 0x30, PIXEL_ON, XOR, OLED_FONT);
 }
 
 void draw_enc_mode(void){
-	draw_string(ENC_DISPLAY_X, ENC_DISPLAY_Y + 2, "ENC", PIXEL_ON, NORM, 0);
+	draw_string(ENC_DISPLAY_X, ENC_DISPLAY_Y + 2, "ENC", PIXEL_ON, NORM, OLED_FONT);
     draw_rect_filled_soft(ENC_DISPLAY_X + 19, ENC_DISPLAY_Y, 21, 11, PIXEL_ON, NORM);
-    draw_string(ENC_DISPLAY_X + 21, ENC_DISPLAY_Y + 2, enc_mode_str[enc_mode], PIXEL_ON, XOR, 0);
+    draw_string(ENC_DISPLAY_X + 21, ENC_DISPLAY_Y + 2, enc_mode_str[enc_mode], PIXEL_ON, XOR, OLED_FONT);
 }
 
 void draw_rgb_info(void) {
 	draw_rect_soft(RGB_DISPLAY_X, RGB_DISPLAY_Y, 22, 11, PIXEL_ON, NORM);
-	draw_string(RGB_DISPLAY_X + 3, RGB_DISPLAY_Y +2, "rgb", PIXEL_ON, NORM, 0);
+	draw_string(RGB_DISPLAY_X + 3, RGB_DISPLAY_Y +2, "rgb", PIXEL_ON, NORM, OLED_FONT);
 }
 
 void draw_wpm(void) {
@@ -142,7 +143,7 @@ void draw_wpm(void) {
 		}
 	}
 
-	draw_string(WPM_DISPLAY_X + 3, WPM_DISPLAY_Y +2, wpm_str, PIXEL_ON, NORM, 0);	
+	draw_string(WPM_DISPLAY_X + 3, WPM_DISPLAY_Y +2, wpm_str, PIXEL_ON, NORM, OLED_FONT);	
 	draw_rect_soft(WPM_DISPLAY_X, WPM_DISPLAY_Y, 22, 11, PIXEL_ON, NORM);
 
 }
@@ -151,20 +152,20 @@ void draw_keyboard_locks(void) {
 	led_t led_state = host_keyboard_led_state();
     if (led_state.caps_lock == true) {
         draw_rect_filled_soft(LOCK_DISPLAY_X + 0, LOCK_DISPLAY_Y, 5 + (3 * 6), 11, PIXEL_ON, NORM);
-        draw_string(LOCK_DISPLAY_X + 3, LOCK_DISPLAY_Y +2, "CAP", PIXEL_OFF, NORM, 0);
+        draw_string(LOCK_DISPLAY_X + 3, LOCK_DISPLAY_Y +2, "CAP", PIXEL_OFF, NORM, OLED_FONT);
     } else if (led_state.caps_lock == false) {
         draw_rect_filled_soft(LOCK_DISPLAY_X + 0, LOCK_DISPLAY_Y, 5 + (3 * 6), 11, PIXEL_OFF, NORM);
         draw_rect_soft(LOCK_DISPLAY_X + 0, LOCK_DISPLAY_Y, 5 + (3 * 6), 11, PIXEL_ON, NORM);
-        draw_string(LOCK_DISPLAY_X + 3, LOCK_DISPLAY_Y +2, "CAP", PIXEL_ON, NORM, 0);
+        draw_string(LOCK_DISPLAY_X + 3, LOCK_DISPLAY_Y +2, "CAP", PIXEL_ON, NORM, OLED_FONT);
     }
 
 	if (led_state.num_lock == true) {
         draw_rect_filled_soft(LOCK_DISPLAY_X + 26, LOCK_DISPLAY_Y, 5 + (3 * 6), 11, PIXEL_ON, NORM);
-        draw_string(LOCK_DISPLAY_X + 29, LOCK_DISPLAY_Y +2, "NUM", PIXEL_OFF, NORM, 0);
+        draw_string(LOCK_DISPLAY_X + 29, LOCK_DISPLAY_Y +2, "NUM", PIXEL_OFF, NORM, OLED_FONT);
     } else if (led_state.num_lock == false) {
         draw_rect_filled_soft(LOCK_DISPLAY_X + 26, LOCK_DISPLAY_Y, 5 + (3 * 6), 11, PIXEL_OFF, NORM);
         draw_rect_soft(LOCK_DISPLAY_X + 26, LOCK_DISPLAY_Y, 5 + (3 * 6), 11, PIXEL_ON, NORM);
-        draw_string(LOCK_DISPLAY_X + 29, LOCK_DISPLAY_Y +2, "NUM", PIXEL_ON, NORM, 0);
+        draw_string(LOCK_DISPLAY_X + 29, LOCK_DISPLAY_Y +2, "NUM", PIXEL_ON, NORM, OLED_FONT);
     }
 }
 
