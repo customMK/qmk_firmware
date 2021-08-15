@@ -123,24 +123,26 @@ void draw_rgb_info(void) {
 }
 
 void draw_wpm(void) {
-    int remainder = 0;
-	char wpm_str[4] = "   ";
-	if (wpm > 999) {
-		wpm = 999;
-	}
-	else  {
-		remainder = wpm % 10;
-		wpm_str[2] = 48 + remainder;
-		wpm = (wpm - remainder)/10;
-		if (wpm > 0) {
-			remainder = wpm % 10;
-			wpm_str[1] = 48 + remainder;
-			wpm = (wpm - remainder)/10;
-			if (wpm > 0) {
-				remainder = wpm % 10;
-				wpm_str[0] = 48 + remainder;
-			}
+    uint8_t remainder = 0;
+	uint8_t balance = 0;
+	char wpm_str[4] = "  0";
+	remainder = wpm % 10;
+	wpm_str[2] = 48 + remainder;
+	balance = wpm - remainder;
+	if (balance >= 10) {
+		remainder = balance % 100;
+		wpm_str[1] = 48 + remainder/10;
+		balance = balance - remainder;
+		if (balance >= 100) {
+			wpm_str[0] = 48 + balance/100;
 		}
+		else {
+			wpm_str[0] = 32;
+		}
+	}
+	else {
+		wpm_str[1] = 32;
+		wpm_str[0] = 32;
 	}
 
 	draw_string(WPM_DISPLAY_X + 3, WPM_DISPLAY_Y +2, wpm_str, PIXEL_ON, NORM, OLED_FONT);	
@@ -166,7 +168,7 @@ void draw_keyboard_locks(void) {
         draw_rect_filled_soft(LOCK_DISPLAY_X + 26, LOCK_DISPLAY_Y, 5 + (3 * 6), 11, PIXEL_OFF, NORM);
         draw_rect_soft(LOCK_DISPLAY_X + 26, LOCK_DISPLAY_Y, 5 + (3 * 6), 11, PIXEL_ON, NORM);
         draw_string(LOCK_DISPLAY_X + 29, LOCK_DISPLAY_Y +2, "NUM", PIXEL_ON, NORM, OLED_FONT);
-    }
+    }  
 }
 
 
