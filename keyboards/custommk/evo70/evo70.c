@@ -16,7 +16,7 @@
 
 #include "evo70.h"
 #include <stdbool.h>
-
+#include "print.h"
 #ifdef QWIIC_MICRO_OLED_ENABLE
 #include "micro_oled.h"
 #include "qwiic.h"
@@ -32,9 +32,10 @@
 #define RGB_DISPLAY_X 55
 #define RGB_DISPLAY_Y 15
 
-#define WPM_DISPLAY_X 80
-#define WPM_DISPLAY_Y 15
+//#define WPM_DISPLAY_X 80
+//#define WPM_DISPLAY_Y 15
 
+#define OLED_FONT 2
 
 /* Encoder Parameters */
 uint8_t enc_mode = 0;
@@ -44,7 +45,7 @@ uint8_t num_enc_mode = sizeof(enc_mode_str) / sizeof(enc_mode_str[0]);
 uint16_t enc_cw[] =  { KC_VOLU, KC_MEDIA_NEXT_TRACK, KC_WH_D };
 uint16_t enc_ccw[] = { KC_VOLD, KC_MEDIA_PREV_TRACK, KC_WH_U };
 
-uint16_t wpm = 0;
+//uint16_t wpm = 0;
 
 bool send_oled = false;
 
@@ -104,88 +105,80 @@ bool encoder_update_kb(uint8_t index, bool clockwise) {
 
 /* OLED Draw Functions */
 void draw_keyboard_layer(void){
-    draw_string(LAYER_DISPLAY_X, LAYER_DISPLAY_Y + 2, "LAYER", PIXEL_ON, NORM, 0);
+    draw_string(LAYER_DISPLAY_X, LAYER_DISPLAY_Y + 2, "LAYER", PIXEL_ON, NORM, OLED_FONT);
 
     draw_rect_filled_soft(LAYER_DISPLAY_X + 31, LAYER_DISPLAY_Y, 11, 11, PIXEL_ON, NORM);
-    draw_char(LAYER_DISPLAY_X + 34, LAYER_DISPLAY_Y + 2, get_highest_layer(layer_state) + 0x30, PIXEL_ON, XOR, 0);
+    draw_char(LAYER_DISPLAY_X + 34, LAYER_DISPLAY_Y + 2, get_highest_layer(layer_state) + 0x30, PIXEL_ON, XOR, OLED_FONT);
 }
 
 void draw_enc_mode(void){
-	draw_string(ENC_DISPLAY_X, ENC_DISPLAY_Y + 2, "ENC", PIXEL_ON, NORM, 0);
+	draw_string(ENC_DISPLAY_X, ENC_DISPLAY_Y + 2, "ENC", PIXEL_ON, NORM, OLED_FONT);
     draw_rect_filled_soft(ENC_DISPLAY_X + 19, ENC_DISPLAY_Y, 21, 11, PIXEL_ON, NORM);
-    draw_string(ENC_DISPLAY_X + 21, ENC_DISPLAY_Y + 2, enc_mode_str[enc_mode], PIXEL_ON, XOR, 0);
+    draw_string(ENC_DISPLAY_X + 21, ENC_DISPLAY_Y + 2, enc_mode_str[enc_mode], PIXEL_ON, XOR, OLED_FONT);
 }
 
 void draw_rgb_info(void) {
 	draw_rect_soft(RGB_DISPLAY_X, RGB_DISPLAY_Y, 22, 11, PIXEL_ON, NORM);
-	draw_string(RGB_DISPLAY_X + 3, RGB_DISPLAY_Y +2, "rgb", PIXEL_ON, NORM, 0);
+	draw_string(RGB_DISPLAY_X + 3, RGB_DISPLAY_Y +2, "rgb", PIXEL_ON, NORM, OLED_FONT);
 }
-
+/*
 void draw_wpm(void) {
-    int remainder = 0;
-	char wpm_str[4] = "   ";
-	if (wpm > 999) {
-		wpm = 999;
-	}
-	else  {
-		remainder = wpm % 10;
-		wpm_str[2] = 48 + remainder;
-		wpm = (wpm - remainder)/10;
-		if (wpm > 0) {
-			remainder = wpm % 10;
-			wpm_str[1] = 48 + remainder;
-			wpm = (wpm - remainder)/10;
-			if (wpm > 0) {
-				remainder = wpm % 10;
-				wpm_str[0] = 48 + remainder;
-			}
+    uint8_t remainder = 0;
+	uint8_t balance = 0;
+	char wpm_str[4] = "  0";
+	remainder = wpm % 10;
+	wpm_str[2] = 48 + remainder;
+	balance = wpm - remainder;
+	if (balance >= 10) {
+		remainder = balance % 100;
+		wpm_str[1] = 48 + remainder/10;
+		balance = balance - remainder;
+		if (balance >= 100) {
+			wpm_str[0] = 48 + balance/100;
+		}
+		else {
+			wpm_str[0] = 32;
 		}
 	}
+	else {
+		wpm_str[1] = 32;
+		wpm_str[0] = 32;
+	}
 
-	draw_string(WPM_DISPLAY_X + 3, WPM_DISPLAY_Y +2, wpm_str, PIXEL_ON, NORM, 0);	
+	draw_string(WPM_DISPLAY_X + 3, WPM_DISPLAY_Y +2, wpm_str, PIXEL_ON, NORM, OLED_FONT);	
 	draw_rect_soft(WPM_DISPLAY_X, WPM_DISPLAY_Y, 22, 11, PIXEL_ON, NORM);
 
 }
+*/
 
 void draw_keyboard_locks(void) {
 	led_t led_state = host_keyboard_led_state();
     if (led_state.caps_lock == true) {
         draw_rect_filled_soft(LOCK_DISPLAY_X + 0, LOCK_DISPLAY_Y, 5 + (3 * 6), 11, PIXEL_ON, NORM);
-        draw_string(LOCK_DISPLAY_X + 3, LOCK_DISPLAY_Y +2, "CAP", PIXEL_OFF, NORM, 0);
+        draw_string(LOCK_DISPLAY_X + 3, LOCK_DISPLAY_Y +2, "CAP", PIXEL_OFF, NORM, OLED_FONT);
     } else if (led_state.caps_lock == false) {
         draw_rect_filled_soft(LOCK_DISPLAY_X + 0, LOCK_DISPLAY_Y, 5 + (3 * 6), 11, PIXEL_OFF, NORM);
         draw_rect_soft(LOCK_DISPLAY_X + 0, LOCK_DISPLAY_Y, 5 + (3 * 6), 11, PIXEL_ON, NORM);
-        draw_string(LOCK_DISPLAY_X + 3, LOCK_DISPLAY_Y +2, "CAP", PIXEL_ON, NORM, 0);
+        draw_string(LOCK_DISPLAY_X + 3, LOCK_DISPLAY_Y +2, "CAP", PIXEL_ON, NORM, OLED_FONT);
     }
 
 	if (led_state.num_lock == true) {
         draw_rect_filled_soft(LOCK_DISPLAY_X + 26, LOCK_DISPLAY_Y, 5 + (3 * 6), 11, PIXEL_ON, NORM);
-        draw_string(LOCK_DISPLAY_X + 29, LOCK_DISPLAY_Y +2, "NUM", PIXEL_OFF, NORM, 0);
+        draw_string(LOCK_DISPLAY_X + 29, LOCK_DISPLAY_Y +2, "NUM", PIXEL_OFF, NORM, OLED_FONT);
     } else if (led_state.num_lock == false) {
         draw_rect_filled_soft(LOCK_DISPLAY_X + 26, LOCK_DISPLAY_Y, 5 + (3 * 6), 11, PIXEL_OFF, NORM);
         draw_rect_soft(LOCK_DISPLAY_X + 26, LOCK_DISPLAY_Y, 5 + (3 * 6), 11, PIXEL_ON, NORM);
-        draw_string(LOCK_DISPLAY_X + 29, LOCK_DISPLAY_Y +2, "NUM", PIXEL_ON, NORM, 0);
-    }
-}
-
-
-
-void init_oled(void) {
-	clear_buffer();
-	
-	draw_keyboard_layer();
-	draw_enc_mode();
-	draw_keyboard_locks();
-	draw_rgb_info();
-	draw_wpm();
+        draw_string(LOCK_DISPLAY_X + 29, LOCK_DISPLAY_Y +2, "NUM", PIXEL_ON, NORM, OLED_FONT);
+    }  
 }
 
 void draw_display(void) {
+	clear_buffer();
 	draw_keyboard_layer();
 	draw_enc_mode();
 	draw_rgb_info();
 	draw_keyboard_locks();
-	draw_wpm();
+	//draw_wpm();
 	send_buffer();
 }
 
@@ -210,11 +203,11 @@ void matrix_scan_kb(void) {
 		}
 	}
 
-	wpm = get_current_wpm();
+	//wpm = get_current_wpm();
 	
 	matrix_scan_user();
 }
 
 void keyboard_post_init_user(void){
-	init_oled();
+
 }
