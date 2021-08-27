@@ -16,208 +16,208 @@
 
 #include "evo65.h"
 #include <stdbool.h>
-
 #ifdef QWIIC_MICRO_OLED_ENABLE
 #include "micro_oled.h"
 #include "qwiic.h"
 #endif
 
-#define LAYER_DISPLAY_X 5
-#define LAYER_DISPLAY_Y 0
-#define ENC_DISPLAY_X 50
+#define ENC_DISPLAY_X 0
 #define ENC_DISPLAY_Y 0
 
-#define LOCK_DISPLAY_X 5
-#define LOCK_DISPLAY_Y 15
-#define RGB_DISPLAY_X 55
-#define RGB_DISPLAY_Y 15
+#define LAYER_DISPLAY_X 5
+#define LAYER_DISPLAY_Y 19
 
-#define WPM_DISPLAY_X 80
-#define WPM_DISPLAY_Y 15
+#define CAPSLOCK_DISPLAY_X 80
+#define CAPSLOCK_DISPLAY_Y 19
+#define NUMLOCK_DISPLAY_X 105
+#define NUMLOCK_DISPLAY_Y 19
+
 
 #define OLED_FONT 2
 
 /* Encoder Parameters */
 uint8_t enc_mode = 0;
 
-char* enc_mode_str[] = {"VOL", "MED", "SCR", "VIA"};
-uint8_t num_enc_mode = sizeof(enc_mode_str) / sizeof(enc_mode_str[0]);
-uint16_t enc_cw[] =  { KC_VOLU, KC_MEDIA_NEXT_TRACK, KC_WH_D };
-uint16_t enc_ccw[] = { KC_VOLD, KC_MEDIA_PREV_TRACK, KC_WH_U };
+#define ENCODER_MATRIX_ROW 3
+#define ENCODER_MATRIX_COL 0
 
-uint16_t wpm = 0;
+#define ENC_VOLUME 0
+#define ENC_MEDIA 1
+#define ENC_CUSTOM 2
+#define ENC_BL_BRIGHT 3
+#define ENC_RGB_BRIGHT 4
+#define ENC_RGB_MODE 5
+#define ENC_RGB_COLOR 6
+#define ENC_SCROLL 7
+
+char* enc_mode_str[] = {"Volume", \
+    "Media Control", \
+    "Custom",
+	"Backlight Brightness", \
+    "Underglow Brightness", \
+    "Underglow Mode", \
+	"Underglow Color", \
+    "Scroll Wheel"
+};
+
+uint8_t enc_mode_str_startpos[] = {49, 28, 49, 7, 7, 25, 22, 31};
+uint8_t num_enc_modes = 8;
+uint16_t enc_cw[] =  { KC_VOLU, KC_MEDIA_NEXT_TRACK, 0, 0, 0, 0, 0, KC_WH_D };
+uint16_t enc_ccw[] = { KC_VOLD, KC_MEDIA_PREV_TRACK, 0, 0, 0, 0, 0, KC_WH_U };
+
+void draw_display(void);
 
 bool send_oled = false;
-
-keyevent_t encoder_ccw = {
-    .key = (keypos_t){.row = 4, .col = 4},
-    .pressed = false
-};
-
-keyevent_t encoder_cw = {
-    .key = (keypos_t){.row = 4, .col = 5},
-    .pressed = false
-};
+static bool OLED_on = true;
 
 void matrix_init_kb(void) {
-	
 	matrix_init_user();
 }
 
-bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
+__attribute__((weak)) void set_custom_encoder_mode_user(bool custom_encoder_mode) {}
 
-	if (record->event.key.row == 3 && record->event.key.col == 0){
-		if (record->event.pressed) {
-			enc_mode = (enc_mode + 1) % num_enc_mode;
+void handle_encoder_switch_process_record(keyrecord_t *record) {
+	static bool OLED_awakened = false;
+    static uint32_t encoder_press_timer = 0;
+
+	if (record->event.pressed) {
+		if (OLED_on == false) {
+		    OLED_on = true;
+			OLED_awakened = true;
+		} else {
+            encoder_press_timer = timer_read32();
+		}
+	} else {
+		if (OLED_awakened == true) {
+			OLED_awakened = false;
+		} else {
+			if (timer_elapsed32(encoder_press_timer) < 300) {
+				if (get_mods() & MOD_MASK_SHIFT) {
+					enc_mode = (enc_mode + (num_enc_modes- 1)) % num_enc_modes;
+				} else {
+					enc_mode = (enc_mode + 1) % num_enc_modes;
+				}
+				set_custom_encoder_mode_user(enc_mode == ENC_CUSTOM);
+			} else {
+				OLED_on = false;
+			}
 		}
 	}
-    send_oled = true;
-
-	return process_record_user(keycode, record);
 }
 
+bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
+	send_oled = true;
+	if (record->event.key.row == ENCODER_MATRIX_ROW && record->event.key.col == ENCODER_MATRIX_COL){
+		handle_encoder_switch_process_record(record);
+		return false;
+	} else {
+	    return process_record_user(keycode, record);
+	}
+}
 
 bool encoder_update_kb(uint8_t index, bool clockwise) {
     if (!encoder_update_user(index, clockwise)) return false;
-	if (enc_mode == num_enc_mode - 1) {
+    if (enc_mode == ENC_RGB_MODE) {
 		if (clockwise) {
-			encoder_cw.pressed = true;
-			encoder_cw.time = (timer_read() | 1);
-			action_exec(encoder_cw);
-			
-    	}
-		else {
-			encoder_ccw.pressed = true;
-			encoder_ccw.time = (timer_read() | 1);
-			action_exec(encoder_ccw);
+		    rgblight_step();
+		} else {
+            rgblight_step_reverse();
 		}
-	}
-	else {
+	} else if (enc_mode == ENC_RGB_BRIGHT) {
+		if (clockwise) {
+		    rgblight_increase_val();
+		} else {
+            rgblight_decrease_val();
+		}
+	} else if (enc_mode == ENC_BL_BRIGHT) {
+		if (clockwise) {
+		    backlight_increase();
+		} else {
+            backlight_decrease();
+		}
+	} else if (enc_mode == ENC_RGB_COLOR) {
+		if (clockwise) {
+		    rgblight_increase_hue();
+		} else {
+            rgblight_decrease_hue();
+		}
+	} else {
 		if (clockwise) {
 			tap_code(enc_cw[enc_mode]);
 		} else {
 			tap_code(enc_ccw[enc_mode]);
 		}
 	}
+	draw_display();
 	return true;
 }
 	
 
 /* OLED Draw Functions */
-void draw_keyboard_layer(void){
-    draw_string(LAYER_DISPLAY_X, LAYER_DISPLAY_Y + 2, "LAYER", PIXEL_ON, NORM, OLED_FONT);
 
-    draw_rect_filled_soft(LAYER_DISPLAY_X + 31, LAYER_DISPLAY_Y, 11, 11, PIXEL_ON, NORM);
-    draw_char(LAYER_DISPLAY_X + 34, LAYER_DISPLAY_Y + 2, get_highest_layer(layer_state) + 0x30, PIXEL_ON, XOR, OLED_FONT);
+void draw_text_rectangle(uint8_t x, uint8_t y, uint8_t width, char* str, bool filled) {
+	if (filled) {
+		draw_rect_filled_soft(x, y, width, 11, PIXEL_ON, NORM);
+	} else {
+		draw_rect_filled_soft(x, y, width, 11, PIXEL_OFF, NORM);
+		draw_rect_soft(x, y, width, 11, PIXEL_ON, NORM);
+	}
+    draw_string(x+3, y+2, str, PIXEL_ON, XOR, OLED_FONT);
+}
+
+void draw_keyboard_layer(void){
+    draw_rect_filled_soft(LAYER_DISPLAY_X, LAYER_DISPLAY_Y, 48, 11, PIXEL_OFF, NORM);
+	draw_string(LAYER_DISPLAY_X+3, LAYER_DISPLAY_Y+2, "0 1 2 3", PIXEL_ON, XOR, OLED_FONT);
+	draw_rect_filled_soft(LAYER_DISPLAY_X + get_highest_layer(layer_state)*12, LAYER_DISPLAY_Y, 11, 11, PIXEL_ON, XOR);
+
+	draw_line_hori(0, 14, 128, PIXEL_ON, NORM);
+
+}
+
+void draw_media_arrow(uint8_t x, uint8_t y, bool fwd) {
+	draw_line_vert(x, y, 7, PIXEL_ON, XOR);
+	draw_line_vert(x+4, y, 7, PIXEL_ON, XOR);
+	draw_line_vert(x+2, y+2, 3, PIXEL_ON, XOR);
+	if (fwd) {
+	    draw_line_vert(x+1, y+1, 5, PIXEL_ON, XOR);
+	    draw_line_vert(x+3, y+3, 1, PIXEL_ON, XOR);
+	} else {
+        draw_line_vert(x+3, y+1, 5, PIXEL_ON, XOR);
+	    draw_line_vert(x+1, y+3, 1, PIXEL_ON, XOR);
+	}
 }
 
 void draw_enc_mode(void){
-	draw_string(ENC_DISPLAY_X, ENC_DISPLAY_Y + 2, "ENC", PIXEL_ON, NORM, OLED_FONT);
-    draw_rect_filled_soft(ENC_DISPLAY_X + 19, ENC_DISPLAY_Y, 21, 11, PIXEL_ON, NORM);
-    draw_string(ENC_DISPLAY_X + 21, ENC_DISPLAY_Y + 2, enc_mode_str[enc_mode], PIXEL_ON, XOR, OLED_FONT);
-}
-
-void draw_rgb_info(void) {
-	draw_rect_soft(RGB_DISPLAY_X, RGB_DISPLAY_Y, 22, 11, PIXEL_ON, NORM);
-	draw_string(RGB_DISPLAY_X + 3, RGB_DISPLAY_Y +2, "rgb", PIXEL_ON, NORM, OLED_FONT);
-}
-
-void draw_wpm(void) {
-    uint8_t remainder = 0;
-	uint8_t balance = 0;
-	char wpm_str[4] = "  0";
-	remainder = wpm % 10;
-	wpm_str[2] = 48 + remainder;
-	balance = wpm - remainder;
-	if (balance >= 10) {
-		remainder = balance % 100;
-		wpm_str[1] = 48 + remainder/10;
-		balance = balance - remainder;
-		if (balance >= 100) {
-			wpm_str[0] = 48 + balance/100;
-		}
-		else {
-			wpm_str[0] = 32;
-		}
+    draw_rect_filled_soft(ENC_DISPLAY_X, ENC_DISPLAY_Y, 128, 11, PIXEL_OFF, NORM);
+    draw_string(enc_mode_str_startpos[enc_mode], ENC_DISPLAY_Y + 2, enc_mode_str[enc_mode], PIXEL_ON, XOR, OLED_FONT);
+	if (enc_mode == ENC_MEDIA) {
+		draw_media_arrow(enc_mode_str_startpos[enc_mode] - 16, ENC_DISPLAY_Y + 2, false);
+		draw_media_arrow(enc_mode_str_startpos[enc_mode] + 88, ENC_DISPLAY_Y + 2, true);
 	}
-	else {
-		wpm_str[1] = 32;
-		wpm_str[0] = 32;
-	}
-
-	draw_string(WPM_DISPLAY_X + 3, WPM_DISPLAY_Y +2, wpm_str, PIXEL_ON, NORM, OLED_FONT);	
-	draw_rect_soft(WPM_DISPLAY_X, WPM_DISPLAY_Y, 22, 11, PIXEL_ON, NORM);
-
 }
 
 void draw_keyboard_locks(void) {
 	led_t led_state = host_keyboard_led_state();
-    if (led_state.caps_lock == true) {
-        draw_rect_filled_soft(LOCK_DISPLAY_X + 0, LOCK_DISPLAY_Y, 5 + (3 * 6), 11, PIXEL_ON, NORM);
-        draw_string(LOCK_DISPLAY_X + 3, LOCK_DISPLAY_Y +2, "CAP", PIXEL_OFF, NORM, OLED_FONT);
-    } else if (led_state.caps_lock == false) {
-        draw_rect_filled_soft(LOCK_DISPLAY_X + 0, LOCK_DISPLAY_Y, 5 + (3 * 6), 11, PIXEL_OFF, NORM);
-        draw_rect_soft(LOCK_DISPLAY_X + 0, LOCK_DISPLAY_Y, 5 + (3 * 6), 11, PIXEL_ON, NORM);
-        draw_string(LOCK_DISPLAY_X + 3, LOCK_DISPLAY_Y +2, "CAP", PIXEL_ON, NORM, OLED_FONT);
-    }
-
-	if (led_state.num_lock == true) {
-        draw_rect_filled_soft(LOCK_DISPLAY_X + 26, LOCK_DISPLAY_Y, 5 + (3 * 6), 11, PIXEL_ON, NORM);
-        draw_string(LOCK_DISPLAY_X + 29, LOCK_DISPLAY_Y +2, "NUM", PIXEL_OFF, NORM, OLED_FONT);
-    } else if (led_state.num_lock == false) {
-        draw_rect_filled_soft(LOCK_DISPLAY_X + 26, LOCK_DISPLAY_Y, 5 + (3 * 6), 11, PIXEL_OFF, NORM);
-        draw_rect_soft(LOCK_DISPLAY_X + 26, LOCK_DISPLAY_Y, 5 + (3 * 6), 11, PIXEL_ON, NORM);
-        draw_string(LOCK_DISPLAY_X + 29, LOCK_DISPLAY_Y +2, "NUM", PIXEL_ON, NORM, OLED_FONT);
-    }  
-}
-
-
-
-void init_oled(void) {
-	clear_buffer();
-	
-	draw_keyboard_layer();
-	draw_enc_mode();
-	draw_keyboard_locks();
-	draw_rgb_info();
-	draw_wpm();
+    draw_text_rectangle(CAPSLOCK_DISPLAY_X, CAPSLOCK_DISPLAY_Y, 5 + (3 * 6), "CAP", led_state.caps_lock);
+    draw_text_rectangle(NUMLOCK_DISPLAY_X, NUMLOCK_DISPLAY_Y, 5 + (3 * 6), "NUM", led_state.num_lock);
 }
 
 void draw_display(void) {
-	draw_keyboard_layer();
-	draw_enc_mode();
-	draw_rgb_info();
-	draw_keyboard_locks();
-	draw_wpm();
+	clear_buffer();
+	if (OLED_on) {
+	    draw_keyboard_layer();
+ 	    draw_enc_mode();
+        draw_keyboard_locks();
+	}
 	send_buffer();
 }
 
-
 void matrix_scan_kb(void) {
-	if (send_oled) {
+	if (send_oled ) {
 		draw_display();
 		send_oled = false;
 	}
 
-	if (enc_mode == num_enc_mode - 1) {
-		if (IS_PRESSED(encoder_ccw)) {
-			encoder_ccw.pressed = false;
-			encoder_ccw.time = (timer_read() | 1);
-			action_exec(encoder_ccw);
-    	}
-
-		if (IS_PRESSED(encoder_cw)) {
-			encoder_cw.pressed = false;
-			encoder_cw.time = (timer_read() | 1);
-			action_exec(encoder_cw);
-		}
-	}
-
-	wpm = get_current_wpm();
-	
 	matrix_scan_user();
 }
 
-void keyboard_post_init_user(void){
-	init_oled();
-}
