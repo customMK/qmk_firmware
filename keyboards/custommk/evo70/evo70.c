@@ -38,8 +38,8 @@
 /* Encoder Parameters */
 uint8_t enc_mode = 0;
 
-#define ENCODER_MATRIX_ROW 3
-#define ENCODER_MATRIX_COL 0
+#define ENCODER_MATRIX_ROW 5
+#define ENCODER_MATRIX_COL 6
 
 #define ENC_VOLUME 0
 #define ENC_MEDIA 1

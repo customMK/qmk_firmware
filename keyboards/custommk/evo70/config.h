@@ -26,12 +26,12 @@
 #define PRODUCT         EVO70
 
 /* key matrix size */
-#define MATRIX_ROWS 5
-#define MATRIX_COLS 15
+#define MATRIX_ROWS 6
+#define MATRIX_COLS 14
 
 /* key matrix pins */
-#define MATRIX_ROW_PINS { D3, D2, F7, F6, F5 }
-#define MATRIX_COL_PINS { F0, F1, F4, E6, B1, B7, B0, E2, D4, D6, D7, B4, B3, B6, C6 }
+#define MATRIX_ROW_PINS { D3, D2, F7, F6, F5, F0 }
+#define MATRIX_COL_PINS { F1, F4, E6, B1, B7, B0, E2, D4, D6, D7, B4, B3, B6, C6 }
 #define UNUSED_PINS
 
 /* COL2ROW or ROW2COL */
