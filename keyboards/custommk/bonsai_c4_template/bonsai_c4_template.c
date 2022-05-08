@@ -77,17 +77,3 @@ void board_init(void) {
     setPinInputHigh(B9);
 }
 
-
-/*    eeprom_write_byte((uint8_t *)40, 0x3c);
-    uprintf("eeprom byte was %u\n", eeprom_read_byte((uint8_t *)40));
-    char* buf1 = "Z";
-    spi_flash_wait_while_busy();
-    flash_get_chip_info(); 
-    flash_erase_chip();
-    flash_write_block(41, buf1, 1);
-    char* buf;
-    buf = "A";
-    flash_read_block(41,buf,1);
-    uprintf("flash byte was %c\n", buf[0]);
-*/
-
