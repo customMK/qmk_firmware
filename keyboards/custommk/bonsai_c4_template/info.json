@@ -1,0 +1,49 @@
+{
+    "keyboard_name": "Bonsai_C4_Template", 
+    "url": "https://www.customMK.com", 
+    "maintainer": "customMK", 
+    "manufacturer": "customMK",
+    "tags": ["microcontroller", "development", "promicro", "stm32f411"],
+    "usb": {
+        "vid": "0xF35B",
+        "pid": "0xFAB7",
+        "device_ver": "0x0001"
+    },
+    "diode_direction": "COL2ROW",
+    "matrix_pins": {
+        "cols": ["B10", "A8", "B1", "B13"],
+        "rows": ["B8", "A15", "A13", "A14"]
+
+    },
+    "debounce": 5,
+    "processor": "STM32F411",
+    "rgblight": {
+        "led_count": 48,
+        "hue_steps": 4,
+        "saturation_steps": 8,
+        "brightness_steps": 4,
+        "animations": {
+            "all": true
+        }
+    },
+    "layouts": {
+        "LAYOUT_default": {
+            "layout": [
+                {"label":"KC_1", "x":3.5, "y":1.1},
+                {"label":"KC_2", "x":4.5, "y":1.1},
+                {"label":"KC_3", "x":5.5, "y":1.1},
+                {"label":"KC_4", "x":6.5, "y":1.1},
+                {"label":"KC_5", "x":7.5, "y":1.1},
+                {"label":"KC_6", "x":8.5, "y":1.1},
+                {"label":"KC_7", "x":9.5, "y":1.1},
+                {"label":"KC_8", "x":10.5, "y":1.1},
+                {"label":"KC_9", "x":11.5, "y":1.1},
+                {"label":"KC_0", "x":12.5, "y":1.1},
+                {"label":"KC_MINS", "x":13.5, "y":1.1},
+                {"label":"KC_EQL", "x":14.5, "y":1.1},
+                {"label":"KC_BSPC", "x":15.5, "y":1.1, "w":2},
+                {"label":"KC_HOME", "x":17.5, "y":1.1},
+                {"label":"KC_TAB", "x":2.5, "y":2.1, "w":1.5}]
+        }
+    }
+}
