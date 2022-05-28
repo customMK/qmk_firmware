@@ -2,8 +2,6 @@
 
 #include "config_common.h"
 
-#define KEYBOARD_sofle_rev1
-
 // FRAM configuration
 #define EXTERNAL_EEPROM_SPI_SLAVE_SELECT_PIN A0
 #define EXTERNAL_EEPROM_SPI_CLOCK_DIVISOR 4 // 48MHz / 4 = 12MHz; max supported by MB85R64 is 20MHz

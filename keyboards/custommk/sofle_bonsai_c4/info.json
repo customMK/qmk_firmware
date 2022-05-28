@@ -1,26 +1,9 @@
 {
-    "keyboard_name": "Bonsai_C4_Template", 
+    "keyboard_name": "Sofle with Bonsai C4", 
     "url": "https://www.customMK.com", 
     "maintainer": "customMK", 
-    "manufacturer": "customMK",
-    "tags": ["microcontroller", "development", "promicro", "stm32f411"],
-    "usb": {
-        "vid": "0xFC32",
-        "pid": "0x1287",
-        "device_ver": "0x0002"
-    },
-    "diode_direction": "COL2ROW",
-    "debounce": 5,
+    "tags": ["microcontroller", "development", "stm32f411"],
     "processor": "STM32F411",
-    "rgblight": {
-        "led_count": 70,
-        "hue_steps": 10,
-        "saturation_steps": 17,
-        "brightness_steps": 17,
-        "animations": {
-            "all": true
-        }
-    },
     "layouts": {
         "LAYOUT_default": {
             "layout": [
