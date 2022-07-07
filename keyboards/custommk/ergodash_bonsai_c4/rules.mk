@@ -15,9 +15,9 @@ CONSOLE_ENABLE = no         # Console for debug
 COMMAND_ENABLE = no        # Commands for debug and configuration
 NKRO_ENABLE = no            # Enable N-Key Rollover
 BACKLIGHT_ENABLE = yes      # Enable keyboard backlight functionality
-#RGBLIGHT_ENABLE = yes        # Enable keyboard RGB underglow
-#RGBLIGHT_DRIVER = WS2812
-#WS2812_DRIVER = pwm
+RGBLIGHT_ENABLE = yes        # Enable keyboard RGB underglow
+RGBLIGHT_DRIVER = WS2812
+WS2812_DRIVER = pwm
 
 
 EEPROM_DRIVER = spi

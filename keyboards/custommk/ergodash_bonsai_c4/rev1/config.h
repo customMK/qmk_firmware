@@ -36,8 +36,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // wiring of each half
 #define MATRIX_ROW_PINS { A4, A3, B10, A8, B0 }
-#define MATRIX_COL_PINS { A7, A6, A5, A1, B13, B14, B5 }
-// #define MATRIX_COL_PINS { B5, B14, B13, A1, A5, A6, A7 } //uncomment this line and comment line above if you need to reverse left-to-right key order
+#define MATRIX_COL_PINS { A7, A6, A5, A1, B13, B14, B15 }
+// #define MATRIX_COL_PINS { B15, B14, B13, A1, A5, A6, A7 } //uncomment this line and comment line above if you need to reverse left-to-right key order
 
 #define DIODE_DIRECTION COL2ROW
 
