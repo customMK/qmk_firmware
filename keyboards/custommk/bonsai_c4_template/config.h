@@ -52,10 +52,10 @@
 
 // I2C Configuration (optional example, can use for OLED, etc.)
 #define I2C_DRIVER I2CD1
-#define I2C_SCL_PIN B6
-#define I2C_SDA_PIN B7
-#define I2C_SCL_PAL_MODE 4
-#define I2C_SDA_PAL_MODE 4
+#define I2C1_SCL_PIN B6
+#define I2C1_SDA_PIN B7
+#define I2C1_SCL_PAL_MODE 4
+#define I2C1_SDA_PAL_MODE 4
 
 #define I2C1_CLOCK_SPEED 100000
 #define I2C1_DUTY_CYCLE STD_DUTY_CYCLE
