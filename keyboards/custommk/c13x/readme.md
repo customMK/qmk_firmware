@@ -1,5 +1,10 @@
 # flurples C-13X
 
+Please note that flurples C-13X is not a customMK-manufactured keyboard. We generated this source code and compiled firmware as a service to the mechanical keyboard community.
+
+If you find this helpful and wish to further support our efforts, your support through our [Patreon](https://www.patreon.com/customMK) (or even [buying our products](https://shop.custommk.com)) is always welcome!
+
+
 Make example for this keyboard (after setting up your build environment):
 
     make custommk/c13x:default
