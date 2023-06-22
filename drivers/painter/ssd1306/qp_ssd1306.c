@@ -133,7 +133,7 @@ const oled_panel_painter_driver_vtable_t ssd1306_driver_vtable = {
 };
 
 #ifdef QUANTUM_PAINTER_SSD1306_SPI_ENABLE
-// Factory function for creating a handle to the SH1106 device
+// Factory function for creating a handle to the SSD1306 device
 painter_device_t qp_ssd1306_make_spi_device(uint16_t panel_width, uint16_t panel_height, pin_t chip_select_pin, pin_t dc_pin, pin_t reset_pin, uint16_t spi_divisor, int spi_mode) {
     for (uint32_t i = 0; i < SSD1306_NUM_DEVICES; ++i) {
         ssd1306_device_t *driver = &ssd1306_drivers[i];
@@ -177,7 +177,7 @@ painter_device_t qp_ssd1306_make_spi_device(uint16_t panel_width, uint16_t panel
 #endif // QUANTUM_PAINTER_SSD1306_SPI_ENABLE
 
 #ifdef QUANTUM_PAINTER_SSD1306_I2C_ENABLE
-// Factory function for creating a handle to the SH1106 device
+// Factory function for creating a handle to the SSD1306 device
 painter_device_t qp_ssd1306_make_i2c_device(uint16_t panel_width, uint16_t panel_height, uint8_t i2c_address) {
     for (uint32_t i = 0; i < SSD1306_NUM_DEVICES; ++i) {
         ssd1306_device_t *driver = &ssd1306_drivers[i];
