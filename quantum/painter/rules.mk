@@ -15,7 +15,9 @@ VALID_QUANTUM_PAINTER_DRIVERS := \
     gc9a01_spi \
     ssd1351_spi \
     sh1106_i2c \
-    sh1106_spi
+    sh1106_spi \
+    ssd1306_i2c \
+    ssd1306_spi
 
 #-------------------------------------------------------------------------------
 
@@ -157,6 +159,29 @@ define handle_quantum_painter_driver
         SRC += \
             $(DRIVER_PATH)/painter/oled_panel/qp_oled_panel.c \
             $(DRIVER_PATH)/painter/sh1106/qp_sh1106.c
+
+    else ifeq ($$(strip $$(CURRENT_PAINTER_DRIVER)),ssd1306_spi)
+        QUANTUM_PAINTER_NEEDS_SURFACE := yes
+        QUANTUM_PAINTER_NEEDS_COMMS_SPI := yes
+        QUANTUM_PAINTER_NEEDS_COMMS_SPI_DC_RESET := yes
+        OPT_DEFS += -DQUANTUM_PAINTER_SSD1306_ENABLE -DQUANTUM_PAINTER_SSD1306_SPI_ENABLE
+        COMMON_VPATH += \
+            $(DRIVER_PATH)/painter/oled_panel \
+            $(DRIVER_PATH)/painter/ssd1306
+        SRC += \
+            $(DRIVER_PATH)/painter/oled_panel/qp_oled_panel.c \
+            $(DRIVER_PATH)/painter/ssd1306/qp_ssd1306.c
+
+    else ifeq ($$(strip $$(CURRENT_PAINTER_DRIVER)),ssd1306_i2c)
+        QUANTUM_PAINTER_NEEDS_SURFACE := yes
+        QUANTUM_PAINTER_NEEDS_COMMS_I2C := yes
+        OPT_DEFS += -DQUANTUM_PAINTER_SSD1306_ENABLE -DQUANTUM_PAINTER_SSD1306_I2C_ENABLE
+        COMMON_VPATH += \
+            $(DRIVER_PATH)/painter/oled_panel \
+            $(DRIVER_PATH)/painter/ssd1306
+        SRC += \
+            $(DRIVER_PATH)/painter/oled_panel/qp_oled_panel.c \
+            $(DRIVER_PATH)/painter/ssd1306/qp_ssd1306.c
 
     endif
 endef
