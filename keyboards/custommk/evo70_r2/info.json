@@ -13,7 +13,6 @@
         "nkro": true,
         "encoder": true,
         "quantum_painter": true,
-        "oled": true,
         "rgblight": true,
         "backlight": true,
         "audio": true
@@ -33,7 +32,7 @@
         "led_count": 48,
         "hue_steps": 4,
         "saturation_steps": 8,
-        "brightness_steps": 4,
+        "brightness_steps": 8,
         "max_brightness": 128,
         "layers": {
             "enabled": true
@@ -43,7 +42,7 @@
             "breathing": true,
             "christmas": true,
             "knight": true,
-            "rainbo_mood": true,
+            "rainbow_mood": true,
             "rainbow_swirl": true,
             "rgb_test": true,
             "snake": true,

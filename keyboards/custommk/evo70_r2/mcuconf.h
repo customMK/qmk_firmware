@@ -24,35 +24,40 @@
 #undef STM32_RTCSEL
 #define STM32_RTCSEL STM32_RTCSEL_LSE
 
+// ST driver for ChibiOS uses timer 2 by deault.
+// We need timer2 for LCD backlight, so force
+// ChibiOS to use TIM5 instead, which is a different
+// 32 bit timer
+#ifdef STM32_ST_USE_TIMER
+    #undef STM32_ST_USE_TIMER
+    #define STM32_ST_USE_TIMER 5
+#endif
+
 // Used for underglow
 #undef STM32_PWM_USE_TIM1 //timer 1 channel 3
 #define STM32_PWM_USE_TIM1 TRUE
 
-// Used for backlight
-//#undef STM32_PWM_USE_TIM2 //timer 2 channel ?
-//#define STM32_PWM_USE_TIM2 TRUE
+// Used for LCD backlight
+#undef STM32_PWM_USE_TIM2 //timer 2 channel 3
+#define STM32_PWM_USE_TIM2 TRUE
 
 // Used for backlight
 #undef STM32_PWM_USE_TIM3 //timer 3 channel 1
 #define STM32_PWM_USE_TIM3 TRUE
 
-// Used for backlight
-//#undef STM32_GPT_USE_TIM3 //timer 3 channel 1
-//#define STM32_GPT_USE_TIM3 TRUE
-
-// Used for backlight
-#undef STM32_PWM_USE_TIM4 //timer 4 channel ?
+// Used for audio (note frequency)
+#undef STM32_PWM_USE_TIM4 //timer 4 channel 3
 #define STM32_PWM_USE_TIM4 TRUE
 
-// Used for backlight
-#undef STM32_GPT_USE_TIM5 //timer 5 channel ?
-#define STM32_GPT_USE_TIM5 TRUE
+// Used for audio (note durations)
+#undef STM32_GPT_USE_TIM9 //timer 9
+#define STM32_GPT_USE_TIM9 TRUE
 
-// Used for FRAM and flash in example code
+// Used for FRAM and flash
 #undef STM32_SPI_USE_SPI1
 #define STM32_SPI_USE_SPI1 TRUE
 
-// Used for OLED
+// Used for OLED and temperature sensor
 #undef STM32_I2C_USE_I2C1
 #define STM32_I2C_USE_I2C1 TRUE
 
